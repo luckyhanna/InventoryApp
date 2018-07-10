@@ -1,5 +1,8 @@
 <resources>
     <string name="app_name">InventoryApp</string>
+
+    <string name="edit_activity_title_new_item">Add a new Item</string>
+
     <string name="summary">There are %1$d items in the inventory.\n</string>
 
     <string name="productName">Product Name</string>

@@ -1,7 +1,10 @@
 <resources>
     <string name="app_name">InventoryApp</string>
 
-    <string name="edit_activity_title_new_item">Add a new Item</string>
+    <!-- Title for the activity to add a new item [CHAR LIMIT=20] -->
+    <string name="title_new_inventory_item">Add a new Item</string>
+    <!-- Title for the activity to edit an item [CHAR LIMIT=20] -->
+    <string name="title_edit_inventory_item">Edit Item</string>
 
     <string name="summary">There are %1$d items in the inventory.\n</string>
 
@@ -11,11 +14,34 @@
     <string name="supplierName">Supplier Name</string>
     <string name="supplierPhone">Supplier Phone Number</string>
 
-    <string name="actionSave">Save</string>
+    <!-- Label for editor menu option to save pet and leave editor [CHAR LIMIT=20] -->
+    <string name="action_save">Save</string>
+    <!-- Label for editor overflow menu option that deletes the current pet [CHAR LIMIT=20] -->
+    <string name="action_delete">Delete</string>
+
     <string name="errorProductName">Enter the Product Name</string>
     <string name="errorPrice">Enter a valid Price</string>
     <string name="errorQuantity">Enter a valid Quantity</string>
     <string name="errorSupplierName">Enter the Supplier Name</string>
+
     <string name="errorSave">An error has occurred :( Please try again.</string>
-    <string name="successSave">Item saved :)</string>
+    <string name="successSave">Item saved with row id: %1$d</string>
+    <string name="errorUpdate">Error with updating item</string>
+    <string name="successUpdate">Item updated</string>
+    <string name="errorDelete">Error with deleting item</string>
+    <string name="successDelete">Item deleted</string>
+
+    <!-- Dialog message when user is leaving editor but hasn't saved changes [CHAR LIMIT=NONE] -->
+    <string name="unsaved_changes_dialog_msg">Discard your changes and quit editing?</string>
+    <!-- Dialog button text for the option to discard a user's changes [CHAR LIMIT=20] -->
+    <string name="discard">Discard</string>
+    <!-- Dialog button text for the option to keep editing the current pet [CHAR LIMIT=20] -->
+    <string name="keep_editing">Keep Editing</string>
+
+    <!-- Dialog message to ask the user to confirm deleting the current item [CHAR LIMIT=NONE] -->
+    <string name="delete_dialog_msg">Delete this item?</string>
+    <!-- Dialog button text for the option to confirm deleting the current item [CHAR LIMIT=20] -->
+    <string name="delete">Delete</string>
+    <!-- Dialog button text for the option to cancel deletion of the current item [CHAR LIMIT=20] -->
+    <string name="cancel">Cancel</string>
 </resources>

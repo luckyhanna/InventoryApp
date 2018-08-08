@@ -4,5 +4,15 @@
 
     <!-- Common margin value used throughout the app -->
     <dimen name="activity_margin">16dp</dimen>
+
+    <dimen name="small_padding">8dp</dimen>
+    <dimen name="separator_height">1dp</dimen>
+    <dimen name="medium_padding">12dp</dimen>
+    <dimen name="title_text_size">18sp</dimen>
+    <dimen name="subtitle_text_size">14sp</dimen>
+    <dimen name="image_width">100dp</dimen>
+    <dimen name="image_height">100dp</dimen>
+    <dimen name="medium_text_size">24sp</dimen>
+
 </resources>
 

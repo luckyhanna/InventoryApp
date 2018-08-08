@@ -1,25 +1,54 @@
 package com.example.hannabotar.inventoryapp;
 
+import android.app.LoaderManager;
+import android.content.ContentUris;
+import android.content.CursorLoader;
 import android.content.Intent;
+import android.content.Loader;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.example.hannabotar.inventoryapp.data.InventoryDbHelper;
+import com.example.hannabotar.inventoryapp.adapter.ItemCursorAdapter;
 import com.example.hannabotar.inventoryapp.data.ItemContract;
 
-public class MainActivity extends AppCompatActivity {
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
-    private InventoryDbHelper mDbHelper;
+public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
+
+    private static final int DB_ITEM_LOADER_ID = 1;
+
+    private static final String[] PROJECTION = {
+            ItemContract.ItemEntry._ID,
+            ItemContract.ItemEntry.COLUMN_PRODUCT_NAME,
+            ItemContract.ItemEntry.COLUMN_PRICE,
+            ItemContract.ItemEntry.COLUMN_QUANTITY,
+    };
+
+    private ItemCursorAdapter mAdapter;
+
+    @BindView(R.id.list)
+    ListView listView;
+    @BindView(R.id.empty_view)
+    TextView emptyView;
+    @BindView(R.id.progress_bar)
+    ProgressBar progressBar;
+    @BindView(R.id.fab)
+    FloatingActionButton fab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        ButterKnife.bind(this);
 
         // Setup FAB to open EditorActivity
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -31,75 +60,47 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        mDbHelper = new InventoryDbHelper(this);
+        // Setup cursor adapter
+        mAdapter = new ItemCursorAdapter(this, null);
+        // Attach cursor adapter to the ListView
+        listView.setAdapter(mAdapter);
 
-        displayInventoryItems();
+        // Set empty view on the ListView, so that it only shows when the list has 0 items.
+        listView.setEmptyView(emptyView);
+
+        // Setup item click listener
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+                mAdapter.getItem(position);
+                Intent edit = new Intent(MainActivity.this, EditActivity.class);
+                edit.setData(ContentUris.withAppendedId(ItemContract.ItemEntry.CONTENT_URI, id));
+                startActivity(edit);
+            }
+        });
+
+        // Prepare the loader. Either re-connect with an existing one,
+        // or start a new one.
+        getLoaderManager().initLoader(DB_ITEM_LOADER_ID, null, this);
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
-        displayInventoryItems();
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        progressBar.setVisibility(View.VISIBLE);
+        return new CursorLoader(this, ItemContract.ItemEntry.CONTENT_URI, PROJECTION, null, null, null);
     }
 
-    private void displayInventoryItems() {
-        SQLiteDatabase db = mDbHelper.getReadableDatabase();
-
-        String[] columns = {
-                ItemContract.ItemEntry._ID,
-                ItemContract.ItemEntry.COLUMN_PRODUCT_NAME,
-                ItemContract.ItemEntry.COLUMN_PRICE,
-                ItemContract.ItemEntry.COLUMN_QUANTITY,
-                ItemContract.ItemEntry.COLUMN_SUPPLIER_NAME,
-                ItemContract.ItemEntry.COLUMN_SUPPLIER_PHONE
-        };
-
-        Cursor cursor = db.query(
-                ItemContract.ItemEntry.TABLE_NAME,
-                columns,
-                null,
-                null,
-                null,
-                null,
-                null
-        );
-
-        try {
-            TextView booksView = (TextView) findViewById(R.id.text_view_items);
-            int itemCount = cursor.getCount();
-            booksView.setText(getString(R.string.summary, itemCount));
-
-            if (itemCount > 0) {
-                booksView.append("\n" +
-                        ItemContract.ItemEntry._ID + " - " +
-                        ItemContract.ItemEntry.COLUMN_PRODUCT_NAME + " - " +
-                        ItemContract.ItemEntry.COLUMN_PRICE + " - " +
-                        ItemContract.ItemEntry.COLUMN_QUANTITY + " - " +
-                        ItemContract.ItemEntry.COLUMN_SUPPLIER_NAME + " - " +
-                        ItemContract.ItemEntry.COLUMN_SUPPLIER_PHONE + " - " +
-                        "\n");
-
-                int idIndex = cursor.getColumnIndex(ItemContract.ItemEntry._ID);
-                int productNameIndex = cursor.getColumnIndex(ItemContract.ItemEntry.COLUMN_PRODUCT_NAME);
-                int priceIndex = cursor.getColumnIndex(ItemContract.ItemEntry.COLUMN_PRICE);
-                int quantityIndex = cursor.getColumnIndex(ItemContract.ItemEntry.COLUMN_QUANTITY);
-                int supplierNameIndex = cursor.getColumnIndex(ItemContract.ItemEntry.COLUMN_SUPPLIER_NAME);
-                int supplierPhoneIndex = cursor.getColumnIndex(ItemContract.ItemEntry.COLUMN_SUPPLIER_PHONE);
-
-                while (cursor.moveToNext()) {
-                    booksView.append(
-                            "\n" +
-                                    cursor.getInt(idIndex) + " - " +
-                                    cursor.getString(productNameIndex) + " - " +
-                                    cursor.getInt(priceIndex) + " - " +
-                                    cursor.getInt(quantityIndex) + " - " +
-                                    cursor.getString(supplierNameIndex) + " - " +
-                                    cursor.getString(supplierPhoneIndex)
-                    );
-                }
-            }
-        } finally {
-            cursor.close();
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        mAdapter.swapCursor(data);
+        progressBar.setVisibility(View.GONE);
+        if (data.getCount() == 0) {
+            emptyView.setText("No items in your local inventory.");
         }
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        mAdapter.swapCursor(null);
     }
 }

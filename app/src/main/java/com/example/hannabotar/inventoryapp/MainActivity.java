@@ -95,7 +95,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         mAdapter.swapCursor(data);
         progressBar.setVisibility(View.GONE);
         if (data.getCount() == 0) {
-            emptyView.setText("No items in your local inventory.");
+            emptyView.setText(getString(R.string.empty_text));
         }
     }
 

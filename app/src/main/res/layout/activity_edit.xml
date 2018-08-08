@@ -15,14 +15,14 @@
 
         <!-- Label -->
         <TextView
-            android:layout_width="0dp"
+            android:layout_width="@dimen/zero_dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/productName" />
 
         <!--Input-->
         <EditText
-            android:layout_width="0dp"
+            android:layout_width="@dimen/zero_dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:id="@+id/edit_product_name"
@@ -36,14 +36,14 @@
 
         <!-- Label -->
         <TextView
-            android:layout_width="0dp"
+            android:layout_width="@dimen/zero_dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/price" />
 
         <!--Input-->
         <EditText
-            android:layout_width="0dp"
+            android:layout_width="@dimen/zero_dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:inputType="number"
@@ -57,14 +57,14 @@
 
         <!-- Label -->
         <TextView
-            android:layout_width="0dp"
+            android:layout_width="@dimen/zero_dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/quantity" />
 
         <!--Input-->
         <EditText
-            android:layout_width="0dp"
+            android:layout_width="@dimen/zero_dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:inputType="number"
@@ -78,14 +78,14 @@
 
         <!-- Label -->
         <TextView
-            android:layout_width="0dp"
+            android:layout_width="@dimen/zero_dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/supplierName" />
 
         <!--Input-->
         <EditText
-            android:layout_width="0dp"
+            android:layout_width="@dimen/zero_dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:id="@+id/edit_supplier_name"
@@ -99,14 +99,14 @@
 
         <!-- Label -->
         <TextView
-            android:layout_width="0dp"
+            android:layout_width="@dimen/zero_dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/supplierPhone" />
 
         <!--Input-->
         <EditText
-            android:layout_width="0dp"
+            android:layout_width="@dimen/zero_dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:id="@+id/edit_supplier_phone"

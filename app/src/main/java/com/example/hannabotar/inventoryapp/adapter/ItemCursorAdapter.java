@@ -13,6 +13,8 @@ import com.example.hannabotar.inventoryapp.data.ItemContract;
 
 public class ItemCursorAdapter extends CursorAdapter {
 
+    private static final String CURRENCY = " eur";
+
     public ItemCursorAdapter(Context context, Cursor c) {
         super(context, c, 0);
     }
@@ -34,7 +36,7 @@ public class ItemCursorAdapter extends CursorAdapter {
         Integer quantity = cursor.getInt(cursor.getColumnIndex(ItemContract.ItemEntry.COLUMN_QUANTITY));
         // Populate fields with extracted properties
         tvName.setText(name);
-        tvPrice.setText(String.valueOf(price));
+        tvPrice.setText(String.valueOf(price) + CURRENCY);
         tvQuantity.setText(String.valueOf(quantity));
     }
 }

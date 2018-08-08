@@ -27,7 +27,7 @@
             android:layout_height="wrap_content"
             android:textColor="@color/black"
             android:textSize="@dimen/subtitle_text_size"
-            tools:text="12"/>
+            tools:text="12 eur"/>
 
         <TextView
             android:id="@+id/item_quantity"

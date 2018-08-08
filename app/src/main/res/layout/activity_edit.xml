@@ -58,17 +58,38 @@
         <!-- Label -->
         <TextView
             android:layout_width="@dimen/zero_dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
+            android:gravity="center_vertical"
             android:text="@string/quantity" />
 
         <!--Input-->
-        <EditText
+        <LinearLayout
             android:layout_width="@dimen/zero_dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:inputType="number"
-            android:id="@+id/edit_quantity" />
+            android:layout_weight="1">
+            <Button
+                android:id="@+id/minus_button"
+                android:layout_width="@dimen/zero_dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="@string/minus"/>
+            <EditText
+                android:id="@+id/edit_quantity"
+                android:layout_width="@dimen/zero_dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:inputType="number"
+                android:gravity="center_horizontal"
+                tools:text="0"/>
+            <Button
+                android:id="@+id/plus_button"
+                android:layout_width="@dimen/zero_dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="@string/plus"/>
+        </LinearLayout>
+
     </LinearLayout>
 
     <LinearLayout
@@ -112,6 +133,13 @@
             android:id="@+id/edit_supplier_phone"
             android:inputType="phone"/>
     </LinearLayout>
+    
+    <Button
+        android:id="@+id/contact_button"
+        android:layout_marginTop="@dimen/activity_margin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/contactSupplier"/>
 
 </LinearLayout>
 

@@ -1,5 +1,6 @@
 package com.example.hannabotar.inventoryapp;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.app.LoaderManager;
 import android.content.ContentUris;
@@ -8,9 +9,13 @@ import android.content.CursorLoader;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.Loader;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NavUtils;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -18,6 +23,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -34,12 +40,20 @@ public class EditActivity extends AppCompatActivity implements LoaderManager.Loa
     EditText mPrice;
     @BindView(R.id.edit_quantity)
     EditText mQuantity;
+    @BindView(R.id.minus_button)
+    Button minusButton;
+    @BindView(R.id.plus_button)
+    Button plusButton;
     @BindView(R.id.edit_supplier_name)
     EditText mSupplierName;
     @BindView(R.id.edit_supplier_phone)
     EditText mSupplierPhone;
+    @BindView(R.id.contact_button)
+    Button contactButton;
 
     private static final int DB_ITEM_LOADER_ID = 1;
+
+    private static final int MY_PERMISSIONS_REQUEST_CALL_PHONE = 1;
 
     private Uri mCurrentItemUri;
 
@@ -76,12 +90,51 @@ public class EditActivity extends AppCompatActivity implements LoaderManager.Loa
         if (mCurrentItemUri != null) {
             setTitle(R.string.title_edit_inventory_item);
             getLoaderManager().initLoader(DB_ITEM_LOADER_ID, null, this);
+            minusButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String quantityString = mQuantity.getText().toString();
+                    if (!TextUtils.isEmpty(quantityString)) {
+                        Integer quantity = Integer.parseInt(quantityString);
+                        if (quantity > 0) {
+                            quantity = quantity - 1;
+                            mQuantity.setText(String.valueOf(quantity));
+                        }
+                    } else {
+                        mQuantity.setText("0");
+                    }
+                }
+            });
+            plusButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String quantityString = mQuantity.getText().toString();
+                    if (!TextUtils.isEmpty(quantityString)) {
+                        Integer quantity = Integer.parseInt(quantityString);
+                        quantity = quantity + 1;
+                        mQuantity.setText(String.valueOf(quantity));
+                    } else {
+                        mQuantity.setText("0");
+                    }
+                }
+            });
+            contactButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    contactSupplier();
+                }
+            });
         } else {
             setTitle(R.string.title_new_inventory_item);
 
             // Invalidate the options menu, so the "Delete" menu option can be hidden.
             // (It doesn't make sense to delete a pet that hasn't been created yet.)
             invalidateOptionsMenu();
+
+            // hide quantity buttons
+            minusButton.setVisibility(View.GONE);
+            plusButton.setVisibility(View.GONE);
+            contactButton.setVisibility(View.GONE);
         }
 
         mProductName.setOnTouchListener(mTouchListener);
@@ -89,6 +142,32 @@ public class EditActivity extends AppCompatActivity implements LoaderManager.Loa
         mQuantity.setOnTouchListener(mTouchListener);
         mSupplierName.setOnTouchListener(mTouchListener);
         mSupplierPhone.setOnTouchListener(mTouchListener);
+    }
+
+    private void contactSupplier() {
+        String supplierPhone = mSupplierPhone.getText().toString().trim();
+        if (TextUtils.isEmpty(supplierPhone)) {
+            Toast.makeText(this, getString(R.string.phoneMissing), Toast.LENGTH_SHORT).show();
+        } else {
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(EditActivity.this,
+                        new String[]{Manifest.permission.CALL_PHONE},
+                        MY_PERMISSIONS_REQUEST_CALL_PHONE);
+            } else {
+                startActivity(new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + supplierPhone)));
+            }
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST_CALL_PHONE: {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    contactSupplier();
+                }
+            }
+        }
     }
 
     private void showUnsavedChangesDialog(DialogInterface.OnClickListener discardButtonClickListener) {

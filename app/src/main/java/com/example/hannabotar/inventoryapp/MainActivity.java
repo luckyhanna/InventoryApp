@@ -68,17 +68,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         // Set empty view on the ListView, so that it only shows when the list has 0 items.
         listView.setEmptyView(emptyView);
 
-        // Setup item click listener
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-                mAdapter.getItem(position);
-                Intent edit = new Intent(MainActivity.this, EditActivity.class);
-                edit.setData(ContentUris.withAppendedId(ItemContract.ItemEntry.CONTENT_URI, id));
-                startActivity(edit);
-            }
-        });
-
         // Prepare the loader. Either re-connect with an existing one,
         // or start a new one.
         getLoaderManager().initLoader(DB_ITEM_LOADER_ID, null, this);

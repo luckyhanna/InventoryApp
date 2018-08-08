@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">InventoryApp</string>
+    <string name="app_name">Inventory App</string>
 
     <!-- Title for the activity to add a new item [CHAR LIMIT=20] -->
     <string name="title_new_inventory_item">Add a new Item</string>
@@ -46,4 +46,6 @@
     <string name="cancel">Cancel</string>
 
     <string name="empty_text">There are no items in your local inventory.\nYou can add new items using the \"+\" button.\n\nDon\'t forget to enter all the required fields that are marked with *</string>
+
+    <string name="sale">Sale</string>
 </resources>
